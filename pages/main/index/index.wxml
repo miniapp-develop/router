@@ -1,0 +1,9 @@
+<view>
+    <view class="page-content">main@index</view>
+    <view class="action" bind:tap="onTapMainIndex">open main@index</view>
+    <view class="action" bind:tap="onTapMainFoo">open main@foo</view>
+    <view class="action" bind:tap="onTapShopIndex">open shop@index</view>
+    <view class="action" bind:tap="onTapShopOrder">open shop@order</view>
+    <view class="action" bind:tap="onTapError">not found</view>
+    <view class="action" bind:tap="onTapCustom">appRouter.custom</view>
+</view>

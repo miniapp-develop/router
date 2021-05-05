@@ -1,0 +1,8 @@
+.idea
+.DS_Store
+.vscode
+typings
+.git
+.MERGE_MSG.swp
+node_modules
+package-lock.json

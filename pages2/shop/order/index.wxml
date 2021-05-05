@@ -1,0 +1,7 @@
+<view>
+    <view class="page-content">shop@order</view>
+    <view class="action" bind:tap="onTapGo1">go -1</view>
+    <view class="action" bind:tap="onTapGo100">go -100</view>
+    <view class="action" bind:tap="onTapOpenDetail">open shop@detail</view>
+    <view class="action" bind:tap="onTapReplaceDetail">replace shop@detail</view>
+</view>

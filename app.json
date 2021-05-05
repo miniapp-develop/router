@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/main/index/index",
+    "pages/main/foo/foo",
+    "pages/shop/index/index",
+    "pages2/shop/order/index",
+    "pages/shop/detail/detail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "miniapp router",
+    "navigationBarTextStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

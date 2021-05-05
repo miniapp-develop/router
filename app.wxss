@@ -1,0 +1,16 @@
+page {
+    background: #f7f7f7;
+}
+
+.page-content {
+    text-align: center;
+    font-size: 70rpx;
+    padding: 70rpx 0;
+    color: coral;
+}
+
+.action {
+    padding: 24rpx;
+    background: white;
+    border-top: 1px solid #f7f7f7;
+}
