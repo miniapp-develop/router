@@ -5,4 +5,5 @@ typings
 .git
 .MERGE_MSG.swp
 node_modules
+miniprogram_npm
 package-lock.json

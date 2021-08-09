@@ -1,4 +1,4 @@
-const vendor = require('./vendor');
+const {vendor} = require('@mini-dev/vendor');
 
 class Router {
     constructor(option = {basePath: null, routes: []}) {

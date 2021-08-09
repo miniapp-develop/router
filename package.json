@@ -1,6 +1,6 @@
 {
   "name": "@mini-dev/router",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "a simple miniapp router",
   "miniprogram": "libs",
   "main": "libs/index.js",
@@ -15,6 +15,9 @@
     "url": "https://github.com/miniapp-develop/router"
   },
   "homepage": "https://github.com/miniapp-develop/router",
+  "dependencies": {
+    "@mini-dev/vendor": "0.0.2"
+  },
   "devDependencies": {
     "jest": "26.6.3"
   },
