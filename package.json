@@ -16,7 +16,6 @@
   },
   "homepage": "https://github.com/miniapp-develop/router",
   "dependencies": {
-    "@mini-dev/vendor": "0.0.2"
   },
   "devDependencies": {
     "jest": "26.6.3"

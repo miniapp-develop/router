@@ -1,20 +1,21 @@
-const {vendor} = require('@mini-dev/vendor');
-
 class Router {
-    constructor(option = {basePath: null, routes: []}) {
+    constructor(option = {name: '', basePath: null, routes: []}) {
+        this.name = option.name || '';
         this.basePath = option.basePath;
         this._routes = [];
-        option.routes && option.routes.forEach(route => {
-            if (typeof route !== 'string' && !route.name) {
-                console.warn('Router.constructor#routes has no name');
-                return;
-            }
-            this.use(route);
-        });
+        if (option.routes) {
+            option.routes.forEach(route => {
+                if (typeof route !== 'string' && !route.name) {
+                    console.warn('Router.constructor#option.routes has no name');
+                    return;
+                }
+                this.use(route);
+            });
+        }
     }
 
     getVendor() {
-        return vendor;
+        return typeof wx === 'object' ? wx : null;
     }
 
     getIndexName() {
@@ -196,6 +197,28 @@ class Router {
                 delta: delta
             });
         }
+    }
+
+    /**
+     * reLaunch({
+     *     name:'',
+     *     path:'', // optional
+     *     params:{} // optional
+     * })
+     * */
+    reLaunch(option) {
+        this.dispatch(option, ({url}) => {
+            this.getVendor().reLaunch({
+                url: url,
+                fail: (err) => {
+                    this.onError({
+                        code: '004',
+                        msg: 'reLaunch fail',
+                        err
+                    });
+                }
+            });
+        });
     }
 }
 
