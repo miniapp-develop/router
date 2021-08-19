@@ -1,9 +1,10 @@
 <view>
-    <view class="page-content">main@index</view>
-    <view class="action" bind:tap="onTapMainIndex">open main@index</view>
-    <view class="action" bind:tap="onTapMainFoo">open main@foo</view>
-    <view class="action" bind:tap="onTapShopIndex">open shop@index</view>
-    <view class="action" bind:tap="onTapShopOrder">open shop@order</view>
+    <view class="page-content">main's index</view>
+    <view class="action" bind:tap="onTapMainIndex">open main's index</view>
+    <view class="action" bind:tap="onTapMainFoo">open main's foo</view>
+    <view class="action" bind:tap="onTapShopIndex">open shop's index</view>
+    <view class="action" bind:tap="onTapShopOrder">open shop's order</view>
+    <view class="action" bind:tap="onTapRelaunch">reLaunch</view>
     <view class="action" bind:tap="onTapError">not found</view>
-    <view class="action" bind:tap="onTapCustom">appRouter.custom</view>
+    <view class="action" bind:tap="onTapCustom">custom Router</view>
 </view>

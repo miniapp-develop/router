@@ -33,6 +33,15 @@ Page({
             }
         });
     },
+    onTapRelaunch() {
+        appRouter.reLaunch({
+            name: ['shop', 'index'],
+            params: {
+                a: 100,
+                b: 200
+            }
+        });
+    },
     onTapShopOrder() {
         getApp().$router.push({
             name: ['shop', 'order'],
