@@ -1,12 +1,19 @@
+function warn() {
+    console.warn.apply(console, ['Router', ...arguments]);
+}
+
+function error() {
+    console.error.apply(console, ['Router', ...arguments]);
+}
+
 class Router {
-    constructor(option = {name: '', basePath: null, routes: []}) {
-        this.name = option.name || '';
+    constructor(option = {basePath: null, routes: []}) {
         this.basePath = option.basePath;
         this._routes = [];
         if (option.routes) {
             option.routes.forEach(route => {
                 if (typeof route !== 'string' && !route.name) {
-                    console.warn('Router.constructor#option.routes has no name');
+                    warn(route, ' has no name');
                     return;
                 }
                 this.use(route);
@@ -18,54 +25,56 @@ class Router {
         return typeof wx === 'object' ? wx : null;
     }
 
-    getIndexName() {
+    getDefaultIndex() {
         return 'index';
     }
 
-    getPageByName(name, basePath) {
-        return `${basePath}${name}/index`;
+    parseName(name) {
+        return [name];
     }
 
-    getPageByPath(path, basePath) {
-        if (path.startsWith('/')) {
-            return path;
-        }
-        return `${basePath}${path}`;
+    getPageByName(name) {
+        return `${name}/index`;
     }
 
-    getAbsPagePath(name, path) {
+    getPageByPath(path) {
+        return path;
+    }
+
+    getAbsPath(name, path) {
         let basePath = this.basePath;
         if (!basePath) {
-            console.warn('no basePath');
+            warn('no basePath');
             basePath = '';
-        }
-        if (!basePath.endsWith('/')) {
+        } else if (!basePath.endsWith('/')) {
             basePath = basePath + '/';
         }
         if (path) {
-            return this.getPageByPath(path, basePath);
+            if (path.startsWith('/')) {
+                return path;
+            } else {
+                return `${basePath}${this.getPageByPath(path)}`;
+            }
         } else {
-            return this.getPageByName(name, basePath);
+            return `${basePath}${this.getPageByName(name)}`;
         }
     }
 
-    getParamString(params = {}, encode = false) {
+    getParamString(params = {}) {
         return Object.entries(params).map(([key, value]) => {
-            if (encode) {
-                key = encodeURIComponent(key);
-                value = encodeURIComponent(value);
-            }
+            key = encodeURIComponent(key);
+            value = encodeURIComponent(value);
             return key + '=' + value;
         }).join('&');
     }
 
     getUrl(name, path, params = {}) {
-        const absPath = this.getAbsPagePath(name, path);
+        const absPath = this.getAbsPath(name, path);
         const qs = this.getParamString(params);
         return qs ? `${absPath}?${qs}` : absPath;
     }
 
-    use(target, handle, option) {
+    use(target, handle, option = {}) {
         if (Array.isArray(target)) {
             target.forEach(name => {
                 this.use(name, handle, option);
@@ -77,9 +86,7 @@ class Router {
                     name: target
                 };
                 if (handle instanceof Router) {//wrap sub router
-                    if (option && option.basePath) {
-                        handle.basePath = option.basePath;
-                    }
+                    handle.basePath = option.basePath || handle.basePath;
                     route.handle = function () {
                         return handle.dispatch.apply(handle, arguments);
                     };
@@ -88,7 +95,7 @@ class Router {
                         return handle.apply(handle, arguments);
                     }
                 } else {
-                    console.warn('handle should be a function or a router');
+                    warn('handle should be a function or a router');
                 }
             } else {// target is a object config
                 route = target;
@@ -102,30 +109,31 @@ class Router {
         // eg. push()
         if (!option) {
             option = {
-                name: [this.getIndexName()]
+                name: this.parseName(this.getDefaultIndex())
             };
         }
-        // eg. push('index')
+        // eg. push('detail')
         if (typeof option === 'string') {
             option = {
-                name: [option]
+                name: this.parseName(option)
             };
         }
         // eg. push({name:'index'})
         if (typeof option.name === "string") {
-            option.name = [option.name];
+            option.name = this.parseName(option.name);
         }
         let targetName;
         let targetPath;
         if (Array.isArray(option.name)) {
-            targetName = option.name.shift() || this.getIndexName();
+            targetName = option.name.shift() || this.parseName(this.getDefaultIndex());
             const route = this._routes.find(ele => {
                 return ele.name === targetName;
-            });
-            if (route && route.handle) {
+            }) || {};
+            if (route.handle) {
                 return route.handle(option, delegate);
+            } else {
+                targetPath = route.path;
             }
-            targetPath = route ? route.path : null;
         } else { // eg. push({path:'/pages/index/index'})
             targetName = null;
             targetPath = option.path;
@@ -135,7 +143,7 @@ class Router {
     }
 
     onError(err) {
-        console.error(err);
+        error(err);
     }
 
     /**

@@ -3,8 +3,7 @@ const moduleRouter = new Router();
 moduleRouter.use({
     name: 'order',
     path: '/module2/shop/order/index'
-});
-moduleRouter.use({
+}).use({
     name: 'detail',
     path: 'detail/detail'
 });
