@@ -23,7 +23,7 @@ function _async(interceptors, data) {
     return next(data);
 }
 
-const NOP = x => Promise.resolve(x);
+const NOP = x => x;
 
 class Router {
     constructor(option = {basePath: null, routes: []}) {
