@@ -1,9 +1,9 @@
 function warn() {
-    console.warn.apply(console, ['Router', ...arguments]);
+    console.warn.apply(console, ['[Router]', ...arguments]);
 }
 
 function error() {
-    console.error.apply(console, ['Router', ...arguments]);
+    console.error.apply(console, ['[Router]', ...arguments]);
 }
 
 class Router {
@@ -95,7 +95,7 @@ class Router {
                         return handle.apply(handle, arguments);
                     }
                 } else {
-                    warn('handle should be a function or a router');
+                    warn('no satisfied handle', handle);
                 }
             } else {// target is a object config
                 route = target;

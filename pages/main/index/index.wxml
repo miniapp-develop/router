@@ -6,5 +6,5 @@
     <view class="action" bind:tap="onTapShopOrder">open shop's order</view>
     <view class="action" bind:tap="onTapRelaunch">reLaunch</view>
     <view class="action" bind:tap="onTapError">not found</view>
-    <view class="action" bind:tap="onTapCustom">custom Router</view>
+    <view class="action" bind:tap="onTapCustom">custom handle</view>
 </view>
