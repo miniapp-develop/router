@@ -6,10 +6,30 @@ function error() {
     console.error.apply(console, ['[Router]', ...arguments]);
 }
 
+function _async(interceptors, data) {
+    let index = 0;
+    const next = function (res) {
+        const interceptor = interceptors[index++];
+        if (!interceptor) {
+            return Promise.resolve(res);
+        }
+        const ret = interceptor.call(interceptor, res);
+        if (ret && ret.then) {
+            return ret.then(next);
+        } else {
+            return next(ret);
+        }
+    };
+    return next(data);
+}
+
+const NOP = x => Promise.resolve(x);
+
 class Router {
     constructor(option = {basePath: null, routes: []}) {
         this.basePath = option.basePath;
         this._routes = [];
+        this.befores = [NOP];
         if (option.routes) {
             option.routes.forEach(route => {
                 if (typeof route !== 'string' && !route.name) {
@@ -23,6 +43,11 @@ class Router {
 
     getVendor() {
         return typeof wx === 'object' ? wx : null;
+    }
+
+    before(h) {
+        this.befores.unshift(h);
+        return this;
     }
 
     getDefaultIndex() {
@@ -43,14 +68,15 @@ class Router {
 
     getAbsPath(name, path) {
         let basePath = this.basePath;
+        const SEP = '/';
         if (!basePath) {
             warn('no basePath');
             basePath = '';
-        } else if (!basePath.endsWith('/')) {
-            basePath = basePath + '/';
+        } else if (!basePath.endsWith(SEP)) {
+            basePath = basePath + SEP;
         }
         if (path) {
-            if (path.startsWith('/')) {
+            if (path.startsWith(SEP)) {
                 return path;
             } else {
                 return `${basePath}${this.getPageByPath(path)}`;
@@ -105,21 +131,16 @@ class Router {
         return this;
     }
 
-    dispatch(option, delegate) {
-        // eg. push()
-        if (!option) {
+    __dispatch(option, delegate) {
+        if (!option) {// eg. push()
             option = {
                 name: this.parseName(this.getDefaultIndex())
             };
-        }
-        // eg. push('detail')
-        if (typeof option === 'string') {
+        } else if (typeof option === 'string') { // eg. push('detail')
             option = {
                 name: this.parseName(option)
             };
-        }
-        // eg. push({name:'index'})
-        if (typeof option.name === "string") {
+        } else if (typeof option.name === "string") {// eg. push({name:'index'})
             option.name = this.parseName(option.name);
         }
         let targetName;
@@ -140,6 +161,12 @@ class Router {
         }
         const url = this.getUrl(targetName, targetPath, option.params);
         return delegate({url});
+    }
+
+    dispatch(option, delegate) {
+        _async(this.befores, option).then(data => {
+            this.__dispatch(data, delegate);
+        });
     }
 
     onError(err) {

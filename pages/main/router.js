@@ -10,6 +10,9 @@ const mainRouter = new Router({
             }
         ]
     }
-);
+).before(data => {
+    console.log('this is mainRouter before', data);
+    return Promise.resolve(JSON.parse(JSON.stringify(data)));
+});
 
 export default mainRouter;

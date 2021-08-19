@@ -4,7 +4,7 @@ import appRouter from "../../../app.router";
 Page({
     data: {},
     onLoad(query) {
-        console.log('main@index', query);
+        console.log("main's index onLoad", query);
     },
     onTapMainIndex() {
         moduleRouter.push({
