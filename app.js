@@ -1,7 +1,11 @@
 import appRouter from "./app.router";
 
 App({
-    onLaunch() {
+    onLaunch(options) {
+
+    },
+    onShow(options) {
+
     },
     $router: appRouter
 });

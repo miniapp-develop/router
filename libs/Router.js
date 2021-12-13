@@ -1,27 +1,4 @@
-function warn() {
-    console.warn.apply(console, ['[Router]', ...arguments]);
-}
-
-function error() {
-    console.error.apply(console, ['[Router]', ...arguments]);
-}
-
-function _async(interceptors, data) {
-    let index = 0;
-    const next = function (res) {
-        const interceptor = interceptors[index++];
-        if (!interceptor) {
-            return Promise.resolve(res);
-        }
-        const ret = interceptor.call(interceptor, res);
-        if (ret && ret.then) {
-            return ret.then(next);
-        } else {
-            return next(ret);
-        }
-    };
-    return next(data);
-}
+const {warn, error, forEach} = require('./utils');
 
 const NOP = x => x;
 
@@ -164,7 +141,7 @@ class Router {
     }
 
     dispatch(option, delegate) {
-        _async(this.befores, option).then(data => {
+        forEach(this.befores, option).then(data => {
             this.__dispatch(data, delegate);
         });
     }
