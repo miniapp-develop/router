@@ -33,6 +33,11 @@ Page({
             }
         });
     },
+    onTapShopUrl() {
+        appRouter.navigateTo({
+            url: '/pages/shop/index/index'
+        });
+    },
     onTapRelaunch() {
         appRouter.reLaunch({
             name: ['shop', 'index'],

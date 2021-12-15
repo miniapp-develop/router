@@ -4,6 +4,7 @@
     <view class="action" bind:tap="onTapMainFoo">open main's foo</view>
     <view class="action" bind:tap="onTapShopIndex">open shop's index</view>
     <view class="action" bind:tap="onTapShopOrder">open shop's order</view>
+    <view class="action" bind:tap="onTapShopUrl">open shop's url</view>
     <view class="action" bind:tap="onTapRelaunch">reLaunch</view>
     <view class="action" bind:tap="onTapError">not found</view>
     <view class="action" bind:tap="onTapCustom">custom handle</view>

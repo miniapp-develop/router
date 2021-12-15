@@ -1,12 +1,10 @@
 const {warn, error, forEach} = require('./utils');
 
-const NOP = x => x;
-
 class Router {
     constructor(option = {basePath: null, routes: []}) {
         this.basePath = option.basePath;
         this._routes = [];
-        this.befores = [NOP];
+        this.befores = [];
         if (option.routes) {
             option.routes.forEach(route => {
                 if (typeof route !== 'string' && !route.name) {
