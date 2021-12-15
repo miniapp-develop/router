@@ -113,36 +113,44 @@ class Router {
             option = {
                 name: this.parseName(this.getDefaultIndex())
             };
-        } else if (typeof option === 'string') { // eg. push('detail')
+        } else if (option.path) {
+            option.url = this.getUrl(null, option.path, option.params);
+        }
+
+        if (option.url) {
+            return delegate(option);
+        }
+
+        if (typeof option === 'string') { // eg. __dispatch('detail')
             option = {
                 name: this.parseName(option)
             };
-        } else if (typeof option.name === "string") {// eg. push({name:'index'})
+        } else if (typeof option.name === "string") {// eg. __dispatch({name:'index'})
             option.name = this.parseName(option.name);
         }
-        let targetName;
-        let targetPath;
-        if (Array.isArray(option.name)) {
-            targetName = option.name.shift() || this.parseName(this.getDefaultIndex());
+
+        if (!Array.isArray(option.name)) {
+            error("option is incompatible", option);
+        } else {
+            /**
+             * eg. option = {name:[]}
+             * eg. option = {name:['index']}
+             * */
+            const targetName = option.name.shift() || this.parseName(this.getDefaultIndex());
             const route = this._routes.find(ele => {
                 return ele.name === targetName;
             }) || {};
             if (route.handle) {
                 return route.handle(option, delegate);
-            } else {
-                targetPath = route.path;
             }
-        } else { // eg. push({path:'/pages/index/index'})
-            targetName = null;
-            targetPath = option.path;
+            option.url = this.getUrl(targetName, route.path, option.params);
         }
-        const url = this.getUrl(targetName, targetPath, option.params);
-        return delegate({url});
+        return delegate(option);
     }
 
     dispatch(option, delegate) {
-        forEach(this.befores, option).then(data => {
-            this.__dispatch(data, delegate);
+        return forEach(this.befores, option).then(dispatchOption => {
+            return this.__dispatch(dispatchOption, delegate);
         });
     }
 
@@ -151,85 +159,104 @@ class Router {
     }
 
     /**
-     * push({
+     * navigateTo("page name")
+     * navigateTo({
      *     name:'',
      *     path:'', // optional
+     *     url:'', // optional
      *     params:{} // optional
      * })
      * */
-    push(option) {
-        this.dispatch(option, ({url}) => {
-            this.getVendor().navigateTo({
-                url: url,
-                fail: (err) => {
+    navigateTo(option) {
+        return this.dispatch(option, delegateOptions => {
+            return this.getVendor().navigateTo({
+                fail: err => {
                     this.onError({
                         code: '002',
                         msg: 'push fail',
                         err
                     });
-                }
-            });
+                },
+                ...delegateOptions
+            })
         });
     }
 
     /**
-     * replace({
+     * redirectTo("page name")
+     * redirectTo({
      *     name:'',
      *     path:'', // optional
+     *     url:'', // optional
      *     params:{} // optional
      * })
      * */
-    replace(option) {
-        this.dispatch(option, ({url}) => {
-            this.getVendor().redirectTo({
-                url: url,
-                fail: (err) => {
+    redirectTo(option) {
+        return this.dispatch(option, delegateOptions => {
+            return this.getVendor().redirectTo({
+                fail: err => {
                     this.onError({
                         code: '003',
-                        msg: 'replace fail',
+                        msg: 'redirectTo fail',
                         err
                     });
-                }
+                },
+                ...delegateOptions
             });
         });
-    }
-
-    /**
-     * go(-1)
-     * */
-    go(delta) {
-        if (delta >= 0) {
-            this.onError({
-                code: '004',
-                msg: '`delta:${delta} should < 0`'
-            });
-        } else {
-            delta = -delta;
-            this.getVendor().navigateBack({
-                delta: delta
-            });
-        }
     }
 
     /**
      * reLaunch({
      *     name:'',
      *     path:'', // optional
+     *     url:'', // optional
      *     params:{} // optional
      * })
      * */
     reLaunch(option) {
-        this.dispatch(option, ({url}) => {
-            this.getVendor().reLaunch({
-                url: url,
-                fail: (err) => {
+        return this.dispatch(option, delegateOptions => {
+            return this.getVendor().reLaunch({
+                fail: err => {
                     this.onError({
-                        code: '004',
+                        code: '005',
                         msg: 'reLaunch fail',
                         err
                     });
-                }
+                },
+                ...delegateOptions
             });
+        });
+    }
+
+    /**
+     * navigateBack(-1)
+     * navigateBack({
+     *     delta:1
+     * })
+     * */
+    navigateBack(option) {
+        if (typeof option === 'number') {
+            if (option <= 0) {
+                this.onError({
+                    code: '004',
+                    msg: '`delta:${delta} should > 0`'
+                });
+            } else {
+                option = {
+                    delta: option
+                };
+            }
+        }
+        return this.getVendor().navigateBack({
+            fail: err => {
+                this.onError({
+                    code: '004',
+                    msg: 'navigateBack fail',
+                    err
+                });
+            },
+            ...option
         });
     }
 }

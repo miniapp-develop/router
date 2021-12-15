@@ -4,170 +4,114 @@ const vendor = require("./vendor");
 describe('Router', () => {
     let wx;
     let parentRouter;
-    let sonRouter;
-    let grandsonRouter;
     beforeEach(() => {
         wx = vendor();
 
-        class TRouter extends Router {
+        class TestRouter extends Router {
             getVendor() {
                 return wx;
             }
         }
 
-        parentRouter = new TRouter({basePath: '/parentDir', routes: [{name: 'detail', path: 'detail/detail'}]});
-        sonRouter = new TRouter({basePath: '/sonDir'});
-        grandsonRouter = new TRouter({basePath: '/grandsonDir'});
-        parentRouter.use('son', sonRouter);
-        sonRouter.use('son', grandsonRouter);
+        parentRouter = new TestRouter({basePath: '/parentDir', routes: [{name: 'detail', path: 'detail/detail'}]});
     });
-    it('push null option', () => {
-        parentRouter.push();
-        expect(wx.navigateTo).toBeCalledTimes(1);
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/index/index');
+    it('navigateTo with null', done => {
+        parentRouter.navigateTo().then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/index/index');
+            done();
+        });
     });
-    it('push a name', () => {
-        parentRouter.push('detail');
-        expect(wx.navigateTo).toBeCalledTimes(1);
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/detail/detail');
+    it('navigateTo with name', done => {
+        parentRouter.navigateTo('detail').then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/detail/detail');
+            done();
+        });
     });
-    it('push non exist name', () => {
-        parentRouter.push('none-exist');
-        expect(wx.navigateTo).toBeCalledTimes(1);
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/none-exist/index');
+    it('navigateTo non exist name', done => {
+        parentRouter.navigateTo('none-exist').then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/none-exist/index');
+            done();
+        });
     });
-    it('push relative path', () => {
-        parentRouter.push({
+    it('navigateTo relative path', done => {
+        parentRouter.navigateTo({
             path: 'relative/index'
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/relative/index');
+            done();
         });
-        expect(wx.navigateTo).toBeCalledTimes(1);
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/relative/index');
     });
-    it('push absolute path', () => {
-        parentRouter.push({
+    it('navigateTo absolute path', done => {
+        parentRouter.navigateTo({
             path: '/absolute/index'
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/absolute/index');
+            done();
         });
-        expect(wx.navigateTo).toBeCalledTimes(1);
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/absolute/index');
     });
-    it('push {name, params}', () => {
-        parentRouter.push({
+    it('navigateTo {name, params}', done => {
+        parentRouter.navigateTo({
             name: 'detail',
             params: {
                 a: 100
             }
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/detail/detail?a=100');
+            done();
         });
-        expect(wx.navigateTo).toBeCalledTimes(1);
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/detail/detail?a=100');
     });
-    it('push {path, params}', () => {
-        parentRouter.push({
+    it('navigateTo {path, params}', done => {
+        parentRouter.navigateTo({
             path: '/absolute/index',
             params: {
                 a: 100
             }
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/absolute/index?a=100');
+            done();
         });
-        expect(wx.navigateTo).toBeCalledTimes(1);
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/absolute/index?a=100');
     });
-    it('push {name, path},path is ignored', () => {
-        parentRouter.push({
+    it('navigateTo {name, path},name is ignored', done => {
+        parentRouter.navigateTo({
             name: 'detail',
             path: '/absolute/index',
             params: {
                 a: 100
             }
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/absolute/index?a=100');
+            done();
         });
-        expect(wx.navigateTo).toBeCalledTimes(1);
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/detail/detail?a=100');
     });
-    it('push child name', () => {
-        parentRouter.push({
+    it('redirectTo', done => {
+        parentRouter.redirectTo({
             name: []
+        }).then(() => {
+            expect(wx.redirectTo).toBeCalledTimes(1);
+            expect(wx.redirectTo.mock.calls[0][0].url).toEqual('/parentDir/index/index');
+            done();
         });
-        parentRouter.push({
-            name: 'son'
-        });
-        parentRouter.push({
-            name: ['son']
-        });
-
-        parentRouter.push({
-            name: ['son', 'index']
-        });
-
-        parentRouter.push({
-            name: ['son', 'son', 'index']
-        });
-
-        sonRouter.push({
-            name: 'index'
-        });
-        expect(wx.navigateTo).toBeCalledTimes(6);
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/index/index');
-        expect(wx.navigateTo.mock.calls[1][0].url).toEqual('/sonDir/index/index');
-        expect(wx.navigateTo.mock.calls[2][0].url).toEqual('/sonDir/index/index');
-        expect(wx.navigateTo.mock.calls[3][0].url).toEqual('/sonDir/index/index');
-        expect(wx.navigateTo.mock.calls[4][0].url).toEqual('/grandsonDir/index/index');
-        expect(wx.navigateTo.mock.calls[5][0].url).toEqual('/sonDir/index/index');
     });
-    it('replace', () => {
-        parentRouter.replace({
-            name: []
-        });
-        parentRouter.replace({
-            name: 'son'
-        });
-        parentRouter.replace({
-            name: ['son']
-        });
-
-        parentRouter.replace({
-            name: ['son', 'index']
-        });
-
-        sonRouter.replace({
-            name: 'index'
-        });
-        expect(wx.redirectTo).toBeCalledTimes(5);
-        expect(wx.redirectTo.mock.calls[0][0].url).toEqual('/parentDir/index/index');
-        expect(wx.redirectTo.mock.calls[1][0].url).toEqual('/sonDir/index/index');
-        expect(wx.redirectTo.mock.calls[2][0].url).toEqual('/sonDir/index/index');
-        expect(wx.redirectTo.mock.calls[3][0].url).toEqual('/sonDir/index/index');
-        expect(wx.redirectTo.mock.calls[4][0].url).toEqual('/sonDir/index/index');
+    it('navigateBack', () => {
+        parentRouter.navigateBack(100);
+        expect(wx.navigateBack).toBeCalledTimes(1);
+        expect(wx.navigateBack.mock.calls[0][0].delta).toEqual(100);
     });
-    it('go', () => {
-        parentRouter.go(-1);
-        parentRouter.go(-100);
-        sonRouter.go(-1);
-        expect(wx.navigateBack).toBeCalledTimes(3);
-        expect(wx.navigateBack.mock.calls[0][0].delta).toEqual(1);
-        expect(wx.navigateBack.mock.calls[1][0].delta).toEqual(100);
-        expect(wx.navigateBack.mock.calls[2][0].delta).toEqual(1);
-    });
-    it('reLaunch', () => {
+    it('reLaunch', done => {
         parentRouter.reLaunch({
             name: []
+        }).then(() => {
+            expect(wx.reLaunch).toBeCalledTimes(1);
+            expect(wx.reLaunch.mock.calls[0][0].url).toEqual('/parentDir/index/index');
+            done();
         });
-        parentRouter.reLaunch({
-            name: 'son'
-        });
-        parentRouter.reLaunch({
-            name: ['son']
-        });
-
-        parentRouter.reLaunch({
-            name: ['son', 'index']
-        });
-
-        sonRouter.reLaunch({
-            name: 'index'
-        });
-        expect(wx.reLaunch).toBeCalledTimes(5);
-        expect(wx.reLaunch.mock.calls[0][0].url).toEqual('/parentDir/index/index');
-        expect(wx.reLaunch.mock.calls[1][0].url).toEqual('/sonDir/index/index');
-        expect(wx.reLaunch.mock.calls[2][0].url).toEqual('/sonDir/index/index');
-        expect(wx.reLaunch.mock.calls[3][0].url).toEqual('/sonDir/index/index');
-        expect(wx.reLaunch.mock.calls[4][0].url).toEqual('/sonDir/index/index');
     });
 });

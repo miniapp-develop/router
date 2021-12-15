@@ -17,55 +17,63 @@ describe('Router', () => {
         mainRouter = new TRouter({basePath: '/main/'});
         childRouter = new TRouter({basePath: '/child/'});
     });
-    it('use default index', () => {
-        mainRouter.push();
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/main/index/index');
+    it('use default index', done => {
+        mainRouter.navigateTo().then(() => {
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/main/index/index');
+            done();
+        });
     });
-    it('use normal', () => {
+    it('use normal', done => {
         mainRouter.use('page1');
-        mainRouter.push({
+        mainRouter.navigateTo({
             name: 'page1'
+        }).then(() => {
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/main/page1/index');
+            done();
         });
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/main/page1/index');
     });
-    it('use array', () => {
+    it('use array', done => {
         mainRouter.use(['page1', 'page2']);
-        mainRouter.push({
+        mainRouter.navigateTo({
             name: 'page1'
+        }).then(() => {
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/main/page1/index');
+            done();
         });
-        mainRouter.push({
-            name: 'page2'
-        });
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/main/page1/index');
-        expect(wx.navigateTo.mock.calls[1][0].url).toEqual('/main/page2/index');
     });
-    it('use object config', () => {
+    it('use object config', done => {
         mainRouter.use({
             name: 'page1',
             path: 'page1/filename'
         });
-        mainRouter.push({
+        mainRouter.navigateTo({
             name: 'page1'
+        }).then(() => {
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/main/page1/filename');
+            done();
         });
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/main/page1/filename');
     });
-    it('use custom handle', () => {
+    it('use custom handle', done => {
         const handleFn = jest.fn();
         mainRouter.use('page1', function (option) {
             handleFn(option);
         });
-        mainRouter.push({
+        mainRouter.navigateTo({
             name: 'page1',
             params: {a: 100}
+        }).then(() => {
+            expect(handleFn.mock.calls[0][0].params).toEqual({a: 100});
+            done();
         });
-        expect(handleFn.mock.calls[0][0].params).toEqual({a: 100});
     });
-    it('use child router', () => {
+    it('use child router', done => {
         mainRouter.use('customName', childRouter);
         childRouter.use('page1');
-        mainRouter.push({
+        mainRouter.navigateTo({
             name: ['customName', 'page1']
+        }).then(() => {
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/child/page1/index');
+            done();
         });
-        expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/child/page1/index');
     });
 });
