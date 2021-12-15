@@ -27,23 +27,19 @@ class Router {
         return this;
     }
 
-    getDefaultIndex() {
+    getDefaultPage() {
         return 'index';
     }
 
-    parseName(name) {
-        return [name];
-    }
-
-    getPageByName(name) {
+    getPagePath(name) {
         return `${name}/index`;
     }
 
-    getPageByPath(path) {
-        return path;
+    getNames(name) {
+        return [name];
     }
 
-    getAbsPath(name, path) {
+    getPageUrl(name, path) {
         let basePath = this.basePath;
         const SEP = '/';
         if (!basePath) {
@@ -56,10 +52,10 @@ class Router {
             if (path.startsWith(SEP)) {
                 return path;
             } else {
-                return `${basePath}${this.getPageByPath(path)}`;
+                return `${basePath}${this.getPath(path)}`;
             }
         } else {
-            return `${basePath}${this.getPageByName(name)}`;
+            return `${basePath}${this.getPagePath(name)}`;
         }
     }
 
@@ -72,7 +68,7 @@ class Router {
     }
 
     getUrl(name, path, params = {}) {
-        const absPath = this.getAbsPath(name, path);
+        const absPath = this.getPageUrl(name, path);
         const qs = this.getParamString(params);
         return qs ? `${absPath}?${qs}` : absPath;
     }
@@ -111,7 +107,7 @@ class Router {
     __dispatch(option, delegate) {
         if (!option) {// eg. push()
             option = {
-                name: this.parseName(this.getDefaultIndex())
+                name: this.getNames(this.getDefaultPage())
             };
         } else if (option.path) {
             option.url = this.getUrl(null, option.path, option.params);
@@ -123,10 +119,10 @@ class Router {
 
         if (typeof option === 'string') { // eg. __dispatch('detail')
             option = {
-                name: this.parseName(option)
+                name: this.getNames(option)
             };
         } else if (typeof option.name === "string") {// eg. __dispatch({name:'index'})
-            option.name = this.parseName(option.name);
+            option.name = this.getNames(option.name);
         }
 
         if (!Array.isArray(option.name)) {
@@ -136,7 +132,7 @@ class Router {
              * eg. option = {name:[]}
              * eg. option = {name:['index']}
              * */
-            const targetName = option.name.shift() || this.parseName(this.getDefaultIndex());
+            const targetName = option.name.shift() || this.getNames(this.getDefaultPage());
             const route = this._routes.find(ele => {
                 return ele.name === targetName;
             }) || {};
