@@ -6,13 +6,13 @@ Page({
         console.log('shop@index', query);
     },
     onTapGo1() {
-        router.go(-1);
+        router.navigateBack(-1);
     },
     onTapGo100() {
-        router.go(-100);
+        router.navigateBack(-100);
     },
     onTapOpenOrder() {
-        router.push({
+        router.navigateTo({
             name: 'order',
             params: {
                 a: 100,
@@ -30,7 +30,7 @@ Page({
         });
     },
     onTapOpenDetail() {
-        router.push({
+        router.navigateTo({
             name: 'detail',
             params: {
                 a: 100,
@@ -39,7 +39,7 @@ Page({
         });
     },
     onTapReplaceDetail() {
-        router.replace({
+        router.redirectTo({
             name: 'detail',
             params: {
                 a: 100,

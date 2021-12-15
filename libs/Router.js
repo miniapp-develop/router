@@ -52,7 +52,7 @@ class Router {
             if (path.startsWith(SEP)) {
                 return path;
             } else {
-                return `${basePath}${this.getPath(path)}`;
+                return `${basePath}${path}`;
             }
         } else {
             return `${basePath}${this.getPagePath(name)}`;

@@ -7,7 +7,7 @@ Page({
         console.log("main's index onLoad", query);
     },
     onTapMainIndex() {
-        moduleRouter.push({
+        moduleRouter.navigateTo({
             name: 'index',
             params: {
                 a: 100,
@@ -16,7 +16,7 @@ Page({
         });
     },
     onTapMainFoo() {
-        moduleRouter.push({
+        moduleRouter.navigateTo({
             name: 'foo',
             params: {
                 a: 100,
@@ -25,7 +25,7 @@ Page({
         });
     },
     onTapShopIndex() {
-        appRouter.push({
+        appRouter.navigateTo({
             name: ['shop', 'index'],
             params: {
                 a: 100,
@@ -43,7 +43,7 @@ Page({
         });
     },
     onTapShopOrder() {
-        getApp().$router.push({
+        getApp().$router.navigateTo({
             name: ['shop', 'order'],
             params: {
                 a: 100,
@@ -52,7 +52,7 @@ Page({
         });
     },
     onTapError() {
-        moduleRouter.push({
+        moduleRouter.navigateTo({
             name: ['nothing'],
             params: {
                 a: 100,
@@ -61,7 +61,7 @@ Page({
         });
     },
     onTapCustom() {
-        getApp().$router.push({
+        getApp().$router.navigateTo({
             name: 'custom',
             params: {
                 a: 100,
