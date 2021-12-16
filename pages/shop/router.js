@@ -1,4 +1,4 @@
-const Router = require('../../app/CustomRouter');
+const Router = require('../../libs/index');
 const moduleRouter = new Router().use({
     name: 'order',
     path: '/module2/shop/order/index'

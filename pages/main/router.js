@@ -1,5 +1,4 @@
-const Router = require('../../app/CustomRouter');
-
+const Router = require('../../libs/index');
 const mainRouter = new Router({
         basePath: '/pages/main/',
         routes: [
