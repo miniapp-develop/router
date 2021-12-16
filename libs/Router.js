@@ -234,7 +234,7 @@ class Router {
             if (option <= 0) {
                 this.onError({
                     code: '004',
-                    msg: '`delta:${delta} should > 0`'
+                    msg: `delta:${option} should > 0`
                 });
             } else {
                 option = {
