@@ -8,15 +8,16 @@ class CustomRouter extends Router {
     }
 }
 
-const appRouter = new CustomRouter({basePath: '/'})
+shopRouter.basePath('/pages/shop/');
+
+const appRouter = new CustomRouter({name: 'AppRouter', basePath: '/'})
     .before(data => {
-        console.log('this is appRouter before', JSON.parse(JSON.stringify(data)));
+        console.log(`[${appRouter.name()}] before`, JSON.parse(JSON.stringify(data)));
         return Promise.resolve(data);
     })
     .use('main', mainRouter)
-    .use('shop', shopRouter, {basePath: '/pages/shop/'})
+    .use('shop', shopRouter)
     .use('custom', function (option) {
-        console.log("this is appRouter's custom handle...", option);
         wx.showModal({
             content: 'this is appRouter\'s custom handle...'
         });

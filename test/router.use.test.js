@@ -62,7 +62,13 @@ describe('Router', () => {
             name: 'page1',
             params: {a: 100}
         }).then(() => {
-            expect(handleFn.mock.calls[0][0].params).toEqual({a: 100});
+            expect(handleFn.mock.calls[0][0]).toEqual({
+                type: 'navigateTo',
+                payload: {
+                    name: [],
+                    params: {a: 100}
+                }
+            });
             done();
         });
     });

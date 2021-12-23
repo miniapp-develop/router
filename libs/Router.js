@@ -1,8 +1,9 @@
 const {warn, error, forEach} = require('./utils');
 
 class Router {
-    constructor(option = {basePath: null, routes: []}) {
-        this.basePath = option.basePath;
+    constructor(option = {name: '', basePath: null, routes: []}) {
+        this.name(option.name);
+        this.basePath(option.basePath);
         this._routes = [];
         this.befores = [];
         if (option.routes) {
@@ -38,7 +39,7 @@ class Router {
     }
 
     getPageUrl(name, path) {
-        let basePath = this.basePath;
+        let basePath = this.basePath();
         const SEP = '/';
         if (!basePath) {
             warn('no basePath');
@@ -71,10 +72,26 @@ class Router {
         return qs ? `${absPath}?${qs}` : absPath;
     }
 
-    use(target, handle, option = {}) {
+    name(newName) {
+        if (newName) {
+            this._name = newName;
+        } else {
+            return this._name;
+        }
+    }
+
+    basePath(path) {
+        if (path) {
+            this._basePath = path;
+        } else {
+            return this._basePath;
+        }
+    }
+
+    use(target, handle) {
         if (Array.isArray(target)) {
             target.forEach(name => {
-                this.use(name, handle, option);
+                this.use(name, handle);
             });
         } else {
             let route;
@@ -83,7 +100,6 @@ class Router {
                     name: target
                 };
                 if (handle instanceof Router) {//wrap sub router
-                    handle.basePath = option.basePath || handle.basePath;
                     route.handle = function () {
                         return handle.dispatch.apply(handle, arguments);
                     };
@@ -102,54 +118,62 @@ class Router {
         return this;
     }
 
-    __dispatch(option, delegate) {
-        if (!option) {// eg. push()
-            option = {
+    __dispatch(data, delegate) {
+        let payload = data.payload;
+        if (!payload) {// eg. push()
+            payload = {
                 name: this.getNames(this.getDefaultPage())
             };
-        } else if (option.path) {
-            option.url = this.getUrl(null, option.path, option.params);
+        } else if (payload.path) {
+            payload.url = this.getUrl(null, payload.path, payload.params);
         }
 
-        if (option.url) {
-            return delegate(option);
+        if (payload.url) {
+            return delegate(payload);
         }
 
-        if (typeof option === 'string') { // eg. __dispatch('detail')
-            option = {
-                name: this.getNames(option)
+        if (typeof payload === 'string') { // eg. __dispatch('detail')
+            payload = {
+                name: this.getNames(payload)
             };
-        } else if (typeof option.name === "string") {// eg. __dispatch({name:'index'})
-            option.name = this.getNames(option.name);
+        } else if (typeof payload.name === "string") {// eg. __dispatch({name:'index'})
+            payload.name = this.getNames(payload.name);
         }
 
-        if (!Array.isArray(option.name)) {
-            error("option is incompatible", option);
+        if (!Array.isArray(payload.name)) {
+            const reason = {
+                msg: "payload is incompatible",
+                err: payload
+            };
+            error(reason);
+            return Promise.reject(reason)
         } else {
             /**
              * eg. option = {name:[]}
              * eg. option = {name:['index']}
              * */
-            const targetName = option.name.shift() || this.getNames(this.getDefaultPage());
+            const targetName = payload.name.shift() || this.getNames(this.getDefaultPage());
             const route = this._routes.find(ele => {
                 return ele.name === targetName;
             }) || {};
             if (route.handle) {
-                return route.handle(option, delegate);
+                return route.handle({payload, type: data.type}, delegate);
             }
-            option.url = this.getUrl(targetName, route.path, option.params);
+            payload.url = this.getUrl(targetName, route.path, payload.params);
+            return delegate(payload);
         }
-        return delegate(option);
     }
 
-    dispatch(option, delegate) {
-        return forEach(this.befores, option).then(dispatchOption => {
-            return this.__dispatch(dispatchOption, delegate);
-        });
+    dispatch(data, delegate) {
+        return forEach(this.befores, data)
+            .then(data => {
+                return this.__dispatch(data, delegate);
+            });
     }
 
     onError(err) {
         error(err);
+        return Promise.reject(err);
     }
 
     /**
@@ -162,18 +186,19 @@ class Router {
      * })
      * */
     navigateTo(option) {
-        return this.dispatch(option, delegateOptions => {
-            return this.getVendor().navigateTo({
-                fail: err => {
-                    this.onError({
-                        code: '002',
-                        msg: 'push fail',
-                        err
-                    });
-                },
-                ...delegateOptions
-            })
-        });
+        return this.dispatch({type: 'navigateTo', payload: option},
+            delegateOptions => {
+                return this.getVendor().navigateTo({
+                    fail: err => {
+                        this.onError({
+                            code: '002',
+                            msg: 'push fail',
+                            err
+                        });
+                    },
+                    ...delegateOptions
+                })
+            });
     }
 
     /**
@@ -186,21 +211,23 @@ class Router {
      * })
      * */
     redirectTo(option) {
-        return this.dispatch(option, delegateOptions => {
-            return this.getVendor().redirectTo({
-                fail: err => {
-                    this.onError({
-                        code: '003',
-                        msg: 'redirectTo fail',
-                        err
-                    });
-                },
-                ...delegateOptions
+        return this.dispatch({type: 'redirectTo', payload: option},
+            delegateOptions => {
+                return this.getVendor().redirectTo({
+                    fail: err => {
+                        this.onError({
+                            code: '003',
+                            msg: 'redirectTo fail',
+                            err
+                        });
+                    },
+                    ...delegateOptions
+                });
             });
-        });
     }
 
     /**
+     * reLaunch("page name")
      * reLaunch({
      *     name:'',
      *     path:'', // optional
@@ -209,18 +236,19 @@ class Router {
      * })
      * */
     reLaunch(option) {
-        return this.dispatch(option, delegateOptions => {
-            return this.getVendor().reLaunch({
-                fail: err => {
-                    this.onError({
-                        code: '005',
-                        msg: 'reLaunch fail',
-                        err
-                    });
-                },
-                ...delegateOptions
+        return this.dispatch({type: 'reLaunch', payload: option},
+            delegateOptions => {
+                return this.getVendor().reLaunch({
+                    fail: err => {
+                        this.onError({
+                            code: '005',
+                            msg: 'reLaunch fail',
+                            err
+                        });
+                    },
+                    ...delegateOptions
+                });
             });
-        });
     }
 
     /**
@@ -232,7 +260,7 @@ class Router {
     navigateBack(option) {
         if (typeof option === 'number') {
             if (option <= 0) {
-                this.onError({
+                return this.onError({
                     code: '004',
                     msg: `delta:${option} should > 0`
                 });
