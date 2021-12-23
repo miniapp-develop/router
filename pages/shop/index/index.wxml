@@ -1,7 +1,7 @@
 <view>
     <view class="page-content">shop's index</view>
-    <view class="action" bind:tap="onTapGo1">go -1</view>
-    <view class="action" bind:tap="onTapGo100">go -100</view>
+    <view class="action" bind:tap="onTapGo1">navigateBack 1</view>
+    <view class="action" bind:tap="onTapGo100">navigateBack 100</view>
     <view class="action" bind:tap="onTapOpenOrder">open shop's order</view>
     <view class="action" bind:tap="onTapReplaceOrder">replace shop's order</view>
     <view class="action" bind:tap="onTapOpenDetail">open shop's detail</view>

@@ -6,10 +6,10 @@ Page({
         console.log('shop@order', query);
     },
     onTapGo1() {
-        router.navigateBack(-1);
+        router.navigateBack(1);
     },
     onTapGo100() {
-        router.navigateBack(-100);
+        router.navigateBack(100);
     },
     onTapOpenDetail() {
         router.navigateTo({

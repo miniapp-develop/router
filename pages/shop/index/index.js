@@ -6,10 +6,10 @@ Page({
         console.log('shop@index', query);
     },
     onTapGo1() {
-        router.navigateBack(-1);
+        router.navigateBack(1);
     },
     onTapGo100() {
-        router.navigateBack(-100);
+        router.navigateBack(100);
     },
     onTapOpenOrder() {
         router.navigateTo({
@@ -21,7 +21,7 @@ Page({
         });
     },
     onTapReplaceOrder() {
-        router.replace({
+        router.redirectTo({
             name: 'order',
             params: {
                 a: 100,
