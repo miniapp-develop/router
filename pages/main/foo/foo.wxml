@@ -2,4 +2,5 @@
     <view class="page-content">main@foo</view>
     <view class="action" bind:tap="onTapGo1">navigateBack 1</view>
     <view class="action" bind:tap="onTapGo100">navigateBack 100</view>
+    <button bind:tap="onTapSend">send data back to main's index</button>
 </view>

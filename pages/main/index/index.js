@@ -21,7 +21,12 @@ Page({
             params: {
                 a: 100,
                 b: 200
-            }
+            },
+            events: {
+                main_foo: function (data) {
+                    console.log('acceptDataFromManFoo', data);
+                }
+            },
         });
     },
     onTapShopIndex() {

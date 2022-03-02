@@ -12,7 +12,7 @@ const mainRouter = new Router({
     }
 ).before(data => {
     console.log(`[${mainRouter.name()}] before`, JSON.parse(JSON.stringify(data)));
-    return Promise.resolve(JSON.parse(JSON.stringify(data)));
+    return Promise.resolve(data);
 });
 
 export default mainRouter;

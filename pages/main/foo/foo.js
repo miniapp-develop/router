@@ -10,5 +10,9 @@ Page({
     },
     onTapGo100() {
         router.navigateBack(100);
+    },
+    onTapSend(e) {
+        const eventChannel = this.getOpenerEventChannel()
+        eventChannel.emit('main_foo', {data: "data from main's foo"});
     }
 });

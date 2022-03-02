@@ -12,7 +12,7 @@ shopRouter.basePath('/pages/shop/');
 
 const appRouter = new CustomRouter({name: 'AppRouter', basePath: '/'})
     .before(data => {
-        console.log(`[${appRouter.name()}] before`, JSON.parse(JSON.stringify(data)));
+        console.log(`[${appRouter.name()}] before: user is null`);
         return Promise.resolve(data);
     })
     .use('main', mainRouter)
