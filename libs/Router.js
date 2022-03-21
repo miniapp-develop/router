@@ -192,7 +192,7 @@ class Router {
                     fail: err => {
                         this.onError({
                             code: '002',
-                            msg: 'push fail',
+                            msg: 'navigateTo fail',
                             err
                         });
                     },
