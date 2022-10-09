@@ -61,7 +61,7 @@ class Router {
     getParamString(params = {}) {
         return Object.entries(params).map(([key, value]) => {
             key = encodeURIComponent(key);
-            value = encodeURIComponent(value);
+            value = encodeURIComponent(value || '');
             return key + '=' + value;
         }).join('&');
     }
