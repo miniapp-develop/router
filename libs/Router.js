@@ -120,15 +120,18 @@ class Router {
 
     __dispatch(data, delegate) {
         let payload = data.payload;
-        if (!payload) {// eg. push()
+        if (!payload) {
             payload = {
                 name: this.getNames(this.getDefaultPage())
             };
-        } else if (payload.path) {
-            payload.url = this.getUrl(null, payload.path, payload.params);
         }
 
         if (payload.url) {
+            return delegate(payload);
+        }
+
+        if (payload.path) {
+            payload.url = this.getUrl(null, payload.path, payload.params);
             return delegate(payload);
         }
 
@@ -179,7 +182,7 @@ class Router {
     /**
      * navigateTo("page name")
      * navigateTo({
-     *     name:'',
+     *     name:'', // optional
      *     path:'', // optional
      *     url:'', // optional
      *     params:{} // optional
@@ -204,7 +207,7 @@ class Router {
     /**
      * redirectTo("page name")
      * redirectTo({
-     *     name:'',
+     *     name:'', // optional
      *     path:'', // optional
      *     url:'', // optional
      *     params:{} // optional
@@ -229,7 +232,7 @@ class Router {
     /**
      * reLaunch("page name")
      * reLaunch({
-     *     name:'',
+     *     name:'', // optional
      *     path:'', // optional
      *     url:'', // optional
      *     params:{} // optional

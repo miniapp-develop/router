@@ -15,28 +15,28 @@ describe('Router', () => {
 
         parentRouter = new TestRouter({basePath: '/parentDir', routes: [{name: 'detail', path: 'detail/detail'}]});
     });
-    it('navigateTo with null', done => {
+    it('navigateTo with nothing', done => {
         parentRouter.navigateTo().then(() => {
             expect(wx.navigateTo).toBeCalledTimes(1);
             expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/index/index');
             done();
         });
     });
-    it('navigateTo with name', done => {
+    it('navigateTo with preset name', done => {
         parentRouter.navigateTo('detail').then(() => {
             expect(wx.navigateTo).toBeCalledTimes(1);
             expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/detail/detail');
             done();
         });
     });
-    it('navigateTo non exist name', done => {
-        parentRouter.navigateTo('none-exist').then(() => {
+    it('navigateTo non preset name', done => {
+        parentRouter.navigateTo('none-preset').then(() => {
             expect(wx.navigateTo).toBeCalledTimes(1);
-            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/none-exist/index');
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/none-preset/index');
             done();
         });
     });
-    it('navigateTo relative path', done => {
+    it('navigateTo with relative path', done => {
         parentRouter.navigateTo({
             path: 'relative/index'
         }).then(() => {
@@ -45,7 +45,7 @@ describe('Router', () => {
             done();
         });
     });
-    it('navigateTo absolute path', done => {
+    it('navigateTo with absolute path', done => {
         parentRouter.navigateTo({
             path: '/absolute/index'
         }).then(() => {
@@ -54,7 +54,46 @@ describe('Router', () => {
             done();
         });
     });
-    it('navigateTo {name, params}', done => {
+    it('navigateTo with url', done => {
+        parentRouter.navigateTo({
+            url: '/url/index'
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/url/index');
+            done();
+        });
+    });
+    it('navigateTo with {name, path}, name is ignored', done => {
+        parentRouter.navigateTo({
+            name: 'detail',
+            path: '/absolute/index'
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/absolute/index');
+            done();
+        });
+    });
+    it('navigateTo with {name, url}, name is ignored', done => {
+        parentRouter.navigateTo({
+            name: 'detail',
+            url: '/url/index'
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/url/index');
+            done();
+        });
+    });
+    it('navigateTo with {path, url}, path is ignored', done => {
+        parentRouter.navigateTo({
+            path: '/absolute/index',
+            url: '/url/index'
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/url/index');
+            done();
+        });
+    });
+    it('navigateTo with {name, params}', done => {
         parentRouter.navigateTo({
             name: 'detail',
             params: {
@@ -63,6 +102,18 @@ describe('Router', () => {
         }).then(() => {
             expect(wx.navigateTo).toBeCalledTimes(1);
             expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/detail/detail?a=100');
+            done();
+        });
+    });
+    it('navigateTo with {name, falsy params}', done => {
+        parentRouter.navigateTo({
+            name: 'detail',
+            params: {
+                none: undefined
+            }
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/parentDir/detail/detail?none=');
             done();
         });
     });
@@ -78,16 +129,39 @@ describe('Router', () => {
             done();
         });
     });
-    it('navigateTo {name, path},name is ignored', done => {
+    it('navigateTo {path, falsy params}', done => {
         parentRouter.navigateTo({
-            name: 'detail',
             path: '/absolute/index',
+            params: {
+                none: undefined
+            }
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/absolute/index?none=');
+            done();
+        });
+    });
+    it('navigateTo {url, params}', done => {
+        parentRouter.navigateTo({
+            url: '/url/index?k=v',
             params: {
                 a: 100
             }
         }).then(() => {
             expect(wx.navigateTo).toBeCalledTimes(1);
-            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/absolute/index?a=100');
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/url/index?k=v');
+            done();
+        });
+    });
+    it('navigateTo {url, falsy params}', done => {
+        parentRouter.navigateTo({
+            url: '/url/index?k=v',
+            params: {
+                none: undefined
+            }
+        }).then(() => {
+            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/url/index?k=v');
             done();
         });
     });
