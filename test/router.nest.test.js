@@ -16,10 +16,10 @@ describe('Router', () => {
         }
 
         parentRouter = new TRouter({basePath: '/parentDir', routes: [{name: 'detail', path: 'detail/detail'}]});
-        sonRouter = new TRouter({basePath: '/sonDir'});
-        parentRouter.use('son', sonRouter);
-        grandsonRouter = new TRouter({basePath: '/grandsonDir'});
-        sonRouter.use('son', grandsonRouter);
+        sonRouter = new TRouter();
+        parentRouter.use('son', sonRouter.basePath('/sonDir'));
+        grandsonRouter = new TRouter();
+        sonRouter.use('son', grandsonRouter.basePath('/grandsonDir'));
     });
 
     it('navigateTo child name', done => {

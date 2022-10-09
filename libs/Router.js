@@ -2,8 +2,8 @@ const {warn, error, forEach} = require('./utils');
 
 class Router {
     constructor(option = {name: '', basePath: null, routes: []}) {
-        this.name(option.name);
-        this.basePath(option.basePath);
+        this.name(option.name)
+            .basePath(option.basePath);
         this._routes = [];
         this.befores = [];
         if (option.routes) {
@@ -72,17 +72,19 @@ class Router {
         return qs ? `${absPath}?${qs}` : absPath;
     }
 
-    name(newName) {
-        if (newName) {
-            this._name = newName;
+    name() {
+        if (arguments.length > 0) {
+            this._name = arguments[0];
+            return this;
         } else {
             return this._name;
         }
     }
 
-    basePath(path) {
-        if (path) {
-            this._basePath = path;
+    basePath() {
+        if (arguments.length > 0) {
+            this._basePath = arguments[0];
+            return this;
         } else {
             return this._basePath;
         }
