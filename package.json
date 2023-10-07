@@ -1,6 +1,6 @@
 {
   "name": "@mini-dev/router",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "a simple miniapp router",
   "miniprogram": "libs",
   "main": "libs/index.js",

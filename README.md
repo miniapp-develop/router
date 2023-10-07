@@ -2,7 +2,9 @@
 
 一个简单的小程序路由封装。
 
-## 目的
+微信小程序路由官方文档[https://developers.weixin.qq.com/miniprogram/dev/reference/api/Router.html](https://developers.weixin.qq.com/miniprogram/dev/reference/api/Router.html)
+
+## 简介
 
 由于个人开发小程序的过程中，在管理路由的时候，有几点不方便的地方：
 
@@ -17,8 +19,8 @@
 
 ```javascript
 router.use({
-    name:'b',
-    path:'/pages/pa/pb/pb.wxml'
+    name: 'b',
+    path: '/pages/pa/pb/pb.wxml'
 })
 ```
 
@@ -26,7 +28,7 @@ router.use({
 
 ```javascript
 
-router.navigateTo({name:'b'})
+router.navigateTo({name: 'b'})
 ```
 
 ### 提供约定的配置。
@@ -40,8 +42,8 @@ router.navigateTo({name:'b'})
 则以下调用会进行相应的页面跳转:
 
 ```javascript
-router.navigateTo({name:'page1'}) // 默认会映射到 page1/index.wxml
-router.navigateTo({name:'page2'}) // 默认会映射到 page2/index.wxml
+router.navigateTo({name: 'page1'}) // 默认会映射到 page1/index.wxml
+router.navigateTo({name: 'page2'}) // 默认会映射到 page2/index.wxml
 ```
 
 ### 提供模块间的路由组合。
@@ -79,8 +81,9 @@ const appRouter = new Router({name: 'AppRouter', basePath: '/'})
 
 ```javascript
 import appRouter from "../app.router";
+
 appRouter.navigateTo({
-    name:['module-a', 'pageA']
+    name: ['module-a', 'pageA']
 })
 ```
 
@@ -96,27 +99,30 @@ appRouter.navigateTo({
 
 ```javascript
     const mainRouter = new Router({
-            name: 'mainRouter',
-            basePath: '/pages/main/',
-            routes: [
-                'index',
-                {
-                    name: 'foo',
-                    path: 'foo/foo'
-                }
-            ]
-        }
-    )
+        name: 'mainRouter',
+        basePath: '/pages/main/',
+        routes: [
+            'index',
+            {
+                name: 'foo',
+                path: 'foo/foo'
+            }
+        ]
+    }
+)
 ```
 
 3. open page
 
 ```javascript
     moduleRouter.navigateTo({
-        name: 'index',
-        params: {
-            a: 100,
-            b: 200
-        }
-    });
+    name: 'index',
+    params: {
+        a: 100,
+        b: 200
+    }
+});
 ```
+
+## ChangeLogs
+
