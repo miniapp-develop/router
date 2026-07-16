@@ -1,0 +1,20 @@
+<view class="about">
+    <view class="brand">
+        <text class="brand-title">@mini-dev/router</text>
+        <text class="brand-sub">name-based routing for WeChat Mini Program</text>
+    </view>
+
+    <view class="section">
+        <view class="section-title">示例分区</view>
+        <view wx:for="{{parts}}" wx:key="title" class="part">
+            <text class="part-title">{{item.title}}</text>
+            <text class="part-desc">{{item.desc}}</text>
+        </view>
+    </view>
+
+    <view class="section">
+        <view class="section-title">关于本 Tab</view>
+        <text class="note">本页是 tabBar 第二项，用于演示 wx.switchTab 的切换目标。switchTab 的 tabBar 路径不能带参数，仅用于纯页面切换。</text>
+        <button class="btn" bindtap="onTapSwitchHome">switchTab 切回首页</button>
+    </view>
+</view>

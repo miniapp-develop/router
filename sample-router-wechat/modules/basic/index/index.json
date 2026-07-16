@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+      "route": "/modules/components/route/index"
+  }
+}

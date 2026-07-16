@@ -1,0 +1,119 @@
+@import "../../../styles/demo-page.wxss";
+
+/* advanced 覆盖：演示卡片嵌于模块分组内，尺寸更紧凑 */
+.status-val {
+    font-family: monospace;
+}
+
+/* advanced 的 .hl 仅加粗，颜色由 .amber / .teal 提供 */
+.tip .hl {
+    color: inherit;
+}
+
+.tip .amber {
+    color: #d9480f;
+}
+
+.tip .teal {
+    color: #0b7285;
+}
+
+/* ===== 模块分组：通过左侧色条 + 徽标颜色区分 shop / game ===== */
+.mod-group {
+    border-radius: 16rpx;
+    padding: 24rpx;
+    margin-bottom: 28rpx;
+    background: #fff;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+    border-left: 8rpx solid #adb5bd;
+}
+
+.mod-group.mod-amber {
+    border-left-color: #f59f00;
+    background: #fffaf0;
+}
+
+.mod-group.mod-teal {
+    border-left-color: #0ca678;
+    background: #f0fbf8;
+}
+
+.mod-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12rpx;
+}
+
+.mod-badge {
+    font-size: 24rpx;
+    color: #fff;
+    padding: 6rpx 18rpx;
+    border-radius: 20rpx;
+    margin-right: 18rpx;
+    font-family: monospace;
+    font-weight: 600;
+}
+
+.mod-amber .mod-badge {
+    background: #f59f00;
+}
+
+.mod-teal .mod-badge {
+    background: #0ca678;
+}
+
+.mod-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #212529;
+}
+
+.mod-desc {
+    font-size: 24rpx;
+    color: #868e96;
+    line-height: 1.5;
+    margin-bottom: 20rpx;
+    padding-left: 4rpx;
+}
+
+/* ===== 演示卡片（覆盖共享样式：更紧凑） ===== */
+.demo-card {
+    background: #fff;
+    border-radius: 12rpx;
+    padding: 24rpx;
+    margin-bottom: 20rpx;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.demo-card:last-child {
+    margin-bottom: 0;
+}
+
+.demo-title {
+    font-size: 28rpx;
+    font-weight: bold;
+    color: #212529;
+    font-family: monospace;
+}
+
+.demo-desc {
+    font-size: 24rpx;
+    color: #868e96;
+    margin: 10rpx 0 16rpx;
+    line-height: 1.5;
+}
+
+.code-block {
+    padding: 22rpx;
+    margin-bottom: 20rpx;
+}
+
+/* shop 模块按钮：琥珀渐变 */
+.run-amber {
+    background: linear-gradient(135deg, #f59f00 0%, #e8590c 100%);
+}
+
+/* game 模块按钮：青色渐变 */
+.run-teal {
+    background: linear-gradient(135deg, #0ca678 0%, #1098ad 100%);
+}

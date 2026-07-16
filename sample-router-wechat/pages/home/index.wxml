@@ -1,0 +1,22 @@
+<view class="home">
+    <view class="brand">
+        <text class="brand-title">@mini-dev/router</text>
+        <text class="brand-sub">name-based routing for WeChat Mini Program</text>
+    </view>
+
+    <view class="entry-list">
+        <view
+            class="entry entry-{{item.key}}"
+            wx:for="{{entries}}"
+            wx:key="key"
+            data-url="{{item.url}}"
+            bindtap="onTapEntry">
+            <view class="entry-index">{{index + 1}}</view>
+            <view class="entry-body">
+                <text class="entry-title">{{item.title}}</text>
+                <text class="entry-desc">{{item.desc}}</text>
+            </view>
+            <text class="entry-arrow">›</text>
+        </view>
+    </view>
+</view>

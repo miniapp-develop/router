@@ -1,0 +1,36 @@
+{
+    "pages": [
+        "pages/home/index",
+        "pages/about/index",
+        "modules/native/console/index",
+        "modules/native/methods/index",
+        "modules/basic/index/index",
+        "modules/basic/foo/foo",
+        "modules/advanced/index/index",
+        "modules/advanced/shop/index/index",
+        "modules/advanced/shop/detail/index",
+        "modules/advanced/shop/order/index",
+        "modules/advanced/game/index/index",
+        "modules/advanced/game/play/index"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "miniapp router",
+        "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+        "list": [
+            {
+                "pagePath": "pages/home/index",
+                "text": "首页"
+            },
+            {
+                "pagePath": "pages/about/index",
+                "text": "关于"
+            }
+        ]
+    },
+    "style": "v2",
+    "sitemapLocation": "sitemap.json"
+}

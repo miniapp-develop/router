@@ -1,0 +1,21 @@
+<view class="container">
+    <route />
+    <view class="debug-info">
+        <view class="row">
+            <text class="label">页面：</text>
+            <text class="value">console（原生方法落地页）</text>
+        </view>
+
+        <view class="params-title">接收到的参数：</view>
+        <view wx:for="{{paramList}}" wx:key="key" class="param-row">
+            <text class="p-key">{{item.key}}</text>
+            <text class="p-val">{{item.value}}</text>
+        </view>
+        <view wx:if="{{paramList.length === 0}}" class="empty">（无参数）</view>
+
+        <view class="raw-title">raw：</view>
+        <view class="raw-block">{{rawParams}}</view>
+    </view>
+
+    <button class="back-btn" bindtap="onTapBack">navigateBack 返回</button>
+</view>

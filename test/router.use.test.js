@@ -1,4 +1,4 @@
-const Router = require("../libs/Router");
+const { Router } = require("../libs");
 const vendor = require("./vendor");
 
 describe('Router', () => {

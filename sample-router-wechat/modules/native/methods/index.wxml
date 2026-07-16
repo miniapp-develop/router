@@ -1,0 +1,65 @@
+<view class="container">
+    <route />
+
+    <view class="status">
+        <text class="status-label">最近操作</text>
+        <text class="status-val">{{lastAction || '暂无'}}</text>
+    </view>
+
+    <view class="tip">
+        下方 navigateTo / redirectTo / reLaunch 均落地到
+        <text class="hl">console 调试页</text>，可在该页查看实际收到的参数。
+    </view>
+
+    <view class="section-title">一、五个原生导航方法</view>
+    <view wx:for="{{demos}}" wx:key="key" class="demo-card">
+        <view class="demo-head">
+            <text class="demo-no">{{index + 1}}</text>
+            <text class="demo-title">{{item.title}}</text>
+        </view>
+        <view class="demo-desc">{{item.desc}}</view>
+        <view class="code-block"><text>{{item.code}}</text></view>
+        <button class="run-btn" data-key="{{item.key}}" bindtap="onRunTap">运行</button>
+    </view>
+
+    <view class="section-title">二、参数解析优先级对比</view>
+    <view class="warn">
+        ⚠️ 核心特性：解析优先级为
+        <text class="hl">url > path > name</text>。
+        只要传入了 <text class="hl">url</text>，就按原样透传，
+        <text class="hl">path 与 params 都会被忽略</text>。
+        想让 params 生效，请用 path 或 name，不要用 url。
+    </view>
+    <view wx:for="{{priorityDemos}}" wx:key="key" class="demo-card {{item.ignored ? 'card-ignored' : 'card-ok'}}">
+        <view class="demo-head">
+            <text class="demo-title">{{item.title}}</text>
+            <text class="tag {{item.ignored ? 'tag-warn' : 'tag-ok'}}">{{item.ignored ? 'params 被忽略' : 'params 生效'}}</text>
+        </view>
+        <view class="code-block"><text>{{item.code}}</text></view>
+        <view class="effective">
+            <text class="effective-label">router 产出 url：</text>
+            <text class="effective-val">{{item.effective}}</text>
+        </view>
+        <view class="receive">console 实收：{{item.receive}}</view>
+        <button class="run-btn" data-key="{{item.key}}" bindtap="onPriorityTap">运行并查看 console</button>
+    </view>
+
+    <view class="section-title">三、switchTab 说明</view>
+    <view class="warn">
+        <text class="hl">switchTab 不支持参数。</text>
+        微信平台规定 <text class="hl">wx.switchTab</text> 的 tabBar 路径
+        <text class="hl">不能带 query 参数</text>，因此 switchTab 仅用于纯页面切换，
+        不演示带参数的方式。
+    </view>
+
+    <view class="log-section">
+        <view class="log-head">
+            <text class="log-title">操作日志</text>
+            <text class="clear-btn" bindtap="onClearLogs">清空</text>
+        </view>
+        <scroll-view class="logs" scroll-y="true">
+            <view wx:for="{{logs}}" wx:key="index" class="log-item">{{item}}</view>
+            <view wx:if="{{logs.length === 0}}" class="log-empty">暂无操作日志</view>
+        </scroll-view>
+    </view>
+</view>

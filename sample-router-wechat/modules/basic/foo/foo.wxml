@@ -1,0 +1,11 @@
+<view class="container">
+    <route />
+    <view class="debug-info">
+        <text>调试信息：{{queryParams}}</text>
+    </view>
+    <view class="action-section">
+        <view class="action" bind:tap="onTapGo1">navigateBack 1层</view>
+        <view class="action" bind:tap="onTapGo100">navigateBack 100层</view>
+        <button bind:tap="onTapSend">发送数据回 basic's index</button>
+    </view>
+</view>

@@ -1,4 +1,4 @@
-const Router = require("../libs/Router");
+const { Router } = require("../libs");
 const vendor = require("./vendor");
 
 describe('Router', () => {
@@ -26,7 +26,7 @@ describe('Router', () => {
         parentRouter.navigateTo({
             name: ['son', 'son', 'index']
         }).then(() => {
-            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo).toHaveBeenCalledTimes(1);
             expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/grandsonDir/index/index');
             done();
         });
@@ -36,7 +36,7 @@ describe('Router', () => {
         sonRouter.navigateTo({
             name: 'index'
         }).then(() => {
-            expect(wx.navigateTo).toBeCalledTimes(1);
+            expect(wx.navigateTo).toHaveBeenCalledTimes(1);
             expect(wx.navigateTo.mock.calls[0][0].url).toEqual('/sonDir/index/index');
             done();
         });

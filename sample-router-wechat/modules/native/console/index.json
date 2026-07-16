@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "route": "/modules/components/route/index"
+  },
+  "navigationBarTitleText": "调试"
+}

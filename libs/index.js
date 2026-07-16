@@ -1,2 +1,5 @@
 const Router = require('./Router');
-module.exports = Router;
+
+module.exports = {
+    Router
+};

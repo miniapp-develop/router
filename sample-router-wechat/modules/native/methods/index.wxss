@@ -1,0 +1,75 @@
+@import "../../../styles/demo-page.wxss";
+
+/* ===== 章节标题 ===== */
+.section-title {
+    font-size: 30rpx;
+    font-weight: bold;
+    color: #343a40;
+    margin: 28rpx 4rpx 16rpx;
+}
+
+/* ===== 参数解析优先级对比 ===== */
+.warn {
+    background: #fff5f5;
+    border-left: 6rpx solid #fa5252;
+    border-radius: 8rpx;
+    padding: 20rpx 24rpx;
+    margin-bottom: 20rpx;
+    font-size: 25rpx;
+    color: #495057;
+    line-height: 1.6;
+}
+
+.warn .hl {
+    color: #fa5252;
+    font-weight: 600;
+}
+
+.card-ignored {
+    border: 2rpx solid #ffc9c9;
+}
+
+.card-ok {
+    border: 2rpx solid #b2f2bb;
+}
+
+.tag {
+    margin-left: auto;
+    font-size: 22rpx;
+    padding: 4rpx 14rpx;
+    border-radius: 20rpx;
+}
+
+.tag-warn {
+    background: #ffe3e3;
+    color: #c92a2a;
+}
+
+.tag-ok {
+    background: #d3f9d8;
+    color: #2b8a3e;
+}
+
+.effective {
+    background: #f1f3f5;
+    border-radius: 8rpx;
+    padding: 14rpx 18rpx;
+    margin-bottom: 12rpx;
+    font-size: 23rpx;
+    word-break: break-all;
+}
+
+.effective-label {
+    color: #868e96;
+}
+
+.effective-val {
+    color: #1864ab;
+    font-family: monospace;
+}
+
+.receive {
+    font-size: 24rpx;
+    color: #495057;
+    margin-bottom: 18rpx;
+}

@@ -1,0 +1,10 @@
+<view>
+    <route/>
+    <view class="debug-info">
+        <text>调试信息：{{queryParams}}</text>
+    </view>
+    <view class="action" bind:tap="onTapGo1">navigateBack 1</view>
+    <view class="action" bind:tap="onTapGo100">navigateBack 100</view>
+    <view class="action" bind:tap="onTapOpenPlay">open game's play</view>
+    <view class="action" bind:tap="onTapReplacePlay">replace game's play</view>
+</view>

@@ -1,0 +1,15 @@
+{
+    "name": "sample-router-wechat",
+    "version": "0.0.0",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "@mini-dev/router": "file:.."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "WeChat Mini Program sample for @mini-dev/router"
+}

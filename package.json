@@ -1,26 +1,40 @@
 {
-  "name": "@mini-dev/router",
-  "version": "0.0.5",
-  "description": "a simple miniapp router",
-  "miniprogram": "libs",
-  "main": "libs/index.js",
-  "scripts": {
-    "test": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+git@github.com:miniapp-develop/router.git"
-  },
-  "bugs": {
-    "url": "https://github.com/miniapp-develop/router"
-  },
-  "homepage": "https://github.com/miniapp-develop/router",
-  "dependencies": {
-  },
-  "devDependencies": {
-    "jest": "26.6.3"
-  },
-  "keywords": [],
-  "author": "xesam",
-  "license": "ISC"
+    "name": "@mini-dev/router",
+    "version": "0.2.0",
+    "description": "a simple miniapp router",
+    "miniprogram": "libs",
+    "main": "libs/index.js",
+    "files": [
+        "libs"
+    ],
+    "scripts": {
+        "test": "jest --coverage"
+    },
+    "jest": {
+        "collectCoverageFrom": [
+            "libs/**/*.js"
+        ],
+        "coverageThreshold": {
+            "global": {
+                "statements": 90,
+                "branches": 85,
+                "functions": 90,
+                "lines": 90
+            }
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+git@github.com:xesam/minidev-router.git"
+    },
+    "bugs": {
+        "url": "https://github.com/xesam/minidev-router"
+    },
+    "homepage": "https://github.com/xesam/minidev-router",
+    "devDependencies": {
+        "jest": "^30.0.5"
+    },
+    "keywords": [],
+    "author": "xesam",
+    "license": "ISC"
 }

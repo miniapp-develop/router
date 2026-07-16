@@ -1,11 +1,10 @@
-pages*
-module*
-app*
-test
+sample*
 project.config.json
+project.private.config.json
 package-lock.json
 node_modules
 miniprogram_npm
-sitemap.json
+test
+docs
 .idea
 *.iml

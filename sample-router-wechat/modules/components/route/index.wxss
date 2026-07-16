@@ -1,0 +1,7 @@
+.root{
+    padding: 1em;
+    font-size: 1.5em;
+    text-align: center;
+    word-break: break-all;
+    word-wrap: break-word;
+}

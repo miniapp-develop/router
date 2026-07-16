@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "route": "/modules/components/route/index"
+    },
+    "navigationBarTitleText": "Router 高级（级联）"
+}

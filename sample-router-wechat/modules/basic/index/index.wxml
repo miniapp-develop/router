@@ -1,0 +1,35 @@
+<view class="container">
+    <route />
+
+    <view class="status">
+        <text class="status-label">最近操作</text>
+        <text class="status-val">{{lastAction || '暂无'}}</text>
+    </view>
+
+    <view class="tip">
+        命名路由：用 <text class="hl">name</text> 取代硬编码路径，router 自动解析路径并序列化
+        <text class="hl">params</text>。下方调用均通过本模块的
+        <text class="hl">moduleRouter</text>（custom / notFound 经 appRouter）。
+    </view>
+
+    <view wx:for="{{demos}}" wx:key="key" class="demo-card">
+        <view class="demo-head">
+            <text class="demo-no">{{index + 1}}</text>
+            <text class="demo-title">{{item.title}}</text>
+        </view>
+        <view class="demo-desc">{{item.desc}}</view>
+        <view class="code-block"><text>{{item.code}}</text></view>
+        <button class="run-btn" data-key="{{item.key}}" bindtap="onRunTap">运行</button>
+    </view>
+
+    <view class="log-section">
+        <view class="log-head">
+            <text class="log-title">操作日志</text>
+            <text class="clear-btn" bindtap="onClearLogs">清空</text>
+        </view>
+        <scroll-view class="logs" scroll-y="true">
+            <view wx:for="{{logs}}" wx:key="index" class="log-item">{{item}}</view>
+            <view wx:if="{{logs.length === 0}}" class="log-empty">暂无操作日志</view>
+        </scroll-view>
+    </view>
+</view>

@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "导航方法",
+  "navigationBarBackgroundColor": "#667eea",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#f5f5f5",
+  "usingComponents": {
+    "route": "/modules/components/route/index"
+  }
+}
