@@ -1,5 +1,6 @@
-const {warn, error, forEach} = require('./utils');
+const {warn, error} = require('./utils');
 const {detect: detectPlatform} = require('./platform');
+const compose = require('koa-compose');
 
 const SEP = '/';
 const DEFAULT_PAGE = 'index';
@@ -9,7 +10,7 @@ class Router {
         this.name(option.name)
             .basePath(option.basePath);
         this._routeMap = new Map();
-        this.befores = [];
+        this._interceptors = [];
         this._vendor = option.vendor; // undefined = auto-detect on first use
         this._delegates = {};
         if (option.routes) {
@@ -39,11 +40,13 @@ class Router {
     }
 
     /**
-     * 注册中间件。后注册的先执行（LIFO，通过 unshift 实现）。
-     * 数据进入 _resolveOption 之前按序执行。返回 Promise 可异步阻断。
+     * 注册洋葱中间件（koa-compose 风格）。注册序 down、逆序 up（after 钩子）。
+     * 签名 (ctx, next) => Promise<void>：await next() 之前为 down 阶段（鉴权 / 埋点 / 改写 ctx.payload），
+     * 之后为 up 阶段（可读 ctx.result）。不调 next 即短路（导航不发生），throw 即阻断（vendor 不调用）。
+     * ctx = {type, payload, router, state, result}；payload 即将进入解析的 option（url > path > name）。
      */
-    before(h) {
-        this.befores.unshift(h);
+    interceptor(mw) {
+        this._interceptors.push(mw);
         return this;
     }
 
@@ -228,12 +231,24 @@ class Router {
         return delegate(payload);
     }
 
-    /** 调度入口：先跑中间件，再跑解析管线 */
+    /**
+     * 调度入口：跑洋葱中间件链，链尾 terminal 执行解析管线（_resolveOption）。
+     * 中间件可改写 ctx.payload；terminal 把 ctx.payload 同步回 data.payload 再解析。
+     * throw / 不调 next 阻断；阻断与导航失败均向外抛出（delegate 内部已走 onError）。
+     */
     dispatch(data, delegate) {
-        return forEach(this.befores, data)
-            .then(data => {
-                return this._resolveOption(data, delegate);
-            });
+        const ctx = {
+            type: data.type,
+            payload: data.payload,
+            router: this,
+            state: {},
+            result: undefined
+        };
+        const terminal = async (ctx) => {
+            data.payload = ctx.payload;
+            ctx.result = await this._resolveOption(data, delegate);
+        };
+        return compose([...this._interceptors, terminal])(ctx).then(() => ctx.result);
     }
 
     /** 懒加载 delegate：首次调用时创建并缓存，vendor 动态获取避免快照过期 */

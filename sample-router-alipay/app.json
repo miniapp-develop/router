@@ -1,0 +1,10 @@
+{
+    "pages": [
+        "pages/index/index",
+        "pages/target/index"
+    ],
+    "window": {
+        "defaultTitle": "miniapp router",
+        "titleBarColor": "#fff"
+    }
+}

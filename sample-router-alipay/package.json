@@ -1,5 +1,5 @@
 {
-    "name": "sample-router-wechat",
+    "name": "sample-router-alipay",
     "version": "0.0.0",
     "main": "app.js",
     "scripts": {
@@ -12,5 +12,5 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "description": "WeChat Mini Program sample for @mini-dev/router"
+    "description": "Alipay Mini Program sample for @mini-dev/router"
 }

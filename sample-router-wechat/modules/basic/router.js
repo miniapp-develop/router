@@ -10,9 +10,9 @@ const basicRouter = new Router({
             path: 'foo/foo'
         }
     ]
-}).before(data => {
-    console.log(`[${basicRouter.name()}] before`, data);
-    return Promise.resolve(data);
+}).interceptor(async (ctx, next) => {
+    console.log(`[${basicRouter.name()}] before`, ctx);
+    await next();
 });
 
 module.exports = basicRouter;

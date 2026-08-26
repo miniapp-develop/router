@@ -4,9 +4,9 @@ const shopRouter = require("./modules/advanced/shop/router");
 const gameRouter = require("./modules/advanced/game/router");
 
 const appRouter = new Router({name: 'AppRouter', basePath: '/'})
-    .before(data => {
+    .interceptor(async (ctx, next) => {
         console.log(`[${appRouter.name()}] before: user is null`);
-        return Promise.resolve(data);
+        await next();
     })
     .use('basic', basicRouter)
     .use('shop', shopRouter)

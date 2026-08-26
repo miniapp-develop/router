@@ -1,0 +1,19 @@
+.container {
+    padding: 24rpx;
+}
+
+.header {
+    padding: 36rpx 0;
+    text-align: center;
+    font-size: 40rpx;
+    color: darkcyan;
+}
+
+.action {
+    padding: 24rpx;
+    text-align: center;
+    margin: 24rpx 0;
+    background: #72bbf7;
+    color: #fff;
+    border-radius: 8rpx;
+}

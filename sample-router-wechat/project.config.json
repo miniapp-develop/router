@@ -50,7 +50,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.7.7",
-  "appid": "wxc2353d904d4d643c",
+  "appid": "your_appid",
   "projectname": "miniapp-router",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},

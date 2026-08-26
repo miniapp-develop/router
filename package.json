@@ -1,11 +1,12 @@
 {
     "name": "@mini-dev/router",
-    "version": "0.2.0",
-    "description": "a simple miniapp router",
+    "version": "0.3.0",
+    "description": "跨微信/支付宝/抖音/百度/QQ 小程序的路由增强库：name 映射、参数序列化、嵌套路由、koa-compose 洋葱中间件（interceptor）。只增强、不归一。",
     "miniprogram": "libs",
     "main": "libs/index.js",
     "files": [
-        "libs"
+        "libs",
+        "CHANGELOG.md"
     ],
     "scripts": {
         "test": "jest --coverage"
@@ -25,16 +26,34 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+git@github.com:xesam/minidev-router.git"
+        "url": "git+https://github.com/xesam/minidev-router.git"
     },
     "bugs": {
-        "url": "https://github.com/xesam/minidev-router"
+        "url": "https://github.com/xesam/minidev-router/issues"
     },
-    "homepage": "https://github.com/xesam/minidev-router",
+    "homepage": "https://github.com/xesam/minidev-router#readme",
+    "publishConfig": {
+        "access": "public"
+    },
     "devDependencies": {
         "jest": "^30.0.5"
     },
-    "keywords": [],
+    "dependencies": {
+        "koa-compose": "^4.1.0"
+    },
+    "keywords": [
+        "miniapp",
+        "miniprogram",
+        "router",
+        "小程序",
+        "路由",
+        "wechat",
+        "alipay",
+        "douyin",
+        "koa-compose",
+        "interceptor",
+        "navigateTo"
+    ],
     "author": "xesam",
     "license": "ISC"
 }

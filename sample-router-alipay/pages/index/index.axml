@@ -1,0 +1,4 @@
+<view class="container">
+    <view class="header">@mini-dev/router (Alipay)</view>
+    <view class="action" onTap="onTapNavigate">navigateTo target</view>
+</view>

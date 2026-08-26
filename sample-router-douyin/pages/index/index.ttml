@@ -1,0 +1,4 @@
+<view class="container">
+    <view class="header">@mini-dev/router (Douyin)</view>
+    <view class="action" bindtap="onTapNavigate">navigateTo target</view>
+</view>
